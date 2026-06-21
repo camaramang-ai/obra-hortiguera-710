@@ -14,3 +14,4 @@ Formato: `YYYY-MM-DD HH:MM | Sesión | Qué cambió`
 2026-06-20 20:52 | CLI   | index.html local creado con resumen visual del proyecto
 2026-06-21 00:43 | CLI   | comparativa.html regenerada con links corregidos a productos específicos
 \n2026-06-21 00:50 | CLI   | Sistema auto-sync instalado: cron cada 30min push a GitHub + _log.md compartido + skill obra-log-sync
+\n2026-06-21 01:35 | CLI   | Sincronización forzada: .gitignore agregado (excluye ~\$ temporales de Excel). index.html actualizado con links directos a archivos. Push manual completado.

@@ -1,0 +1,55 @@
+Lista completa de productos del presupuesto Barugel (4 hojas)
+
+═══ HOJA 1 — Revestimientos y Porcelanatos ═══
+
+  Código    Producto                                          Cant.
+  ──────    ───────                                          ─────
+  34616630  Porcelanato Cerdisa Deep Sun 60x120 NAT          30.24 m²
+  34613068  Portobello Revestimiento Art Martase              1.44 m²
+  34631303  Porcelanato Tendenza Black Cement                 4.95 m²
+  34610648  Eliane Cerámica Forma Branco 32x60               30.10 m² (16.30+13.80)
+  34610260  Portobello Nord Ris Decor Ripado 30x90            4.02 m²
+  34207070  Vite Porcelanato Liscio Light Eco Grey 20x120     4.32 m²
+  34155088  Pinto Vivant Luge Suave 7x24.5                    2.04 m²
+  34155088  Pinto PBG Revest Vivant Suage 7x24.5              3.06 m²
+  34361010  Klaukol Adhesivo Fluido Porcelanato x25 kg        26 un
+
+═══ HOJA 2 — Pastinas, Sanitarios y Vanitorios ═══
+
+  Código    Producto                                          Cant.
+  ──────    ───────                                          ─────
+  34380202  Klaukol Pastina Fluida SKG05 Blanco 5kg            1 un
+  34380206  Klaukol Pastina Fluida SKG05 Gris Claro 5kg        1 un
+  34380200  Klaukol Pastina Fluida AP Perla 5kg                2 un
+  33291150  FV Bañera Enoxado 150x70                           1 un
+  34104104  FV Desagüe Lineal 60cm Rejilla Ciega               1 un
+  33921125  Inodoro Largo Ferrum Bari Blanco KLM B             1 un
+  33921089  Depósito Ferrum Bari Blanco de Apoyar              1 un
+  33921125  Bidet Ferrum Bari Blanco 3 Agujeros                1 un
+  33921125  Tapa Asiento Ferrum Bari Blanca Madera             1 un
+  33921125  Schneider Vanitory City Colgar 80cm                1 un
+  33250178  Schneider Vanitory Rivo Colg 60cm Blanco           1 un
+  34104798  FV Ducha c/Transferencia Mauna Cromo               2 JG
+
+═══ HOJA 3 — Griferías y Accesorios FV ═══
+
+  Código    Producto                                          Cant.
+  ──────    ───────                                          ─────
+  33104796  FV Lavatorio Mauna Cromo                          3 JG
+  33104797  FV Bidet Mauna Cromo                              2 JG
+  33301044  FV Portarrollos Cromo C/0167                      3 un
+  33301042  FV Toallero Barra Cromo C/0405                    3 un
+  33301043  FV Percha Cromo C/0166                            5 un
+  33104901  Ducha c/Brazo FV Duchamatic Cromo                 2 un
+
+═══ HOJA 4 — Espejos, Sanitarios Roca, Revestimientos ═══
+
+  Código    Producto                                          Cant.
+  ──────    ───────                                          ─────
+  43000008  Espejo Reflejar Rectang. 100x80 4mm               1 un
+  33532048  Espejo 20x30 Bordes Acabado Ilumin Oxboro 220V    1 un
+  33200041  Indoor Largo c/Salvaguarda GAP Blanco Roca        1 un
+  33200043  Alimentación Efectiva Cond. Bajo Exc. 3/6         1 un
+  33200045  Bidet 3 Agujeros Roca La Gama Tapas Cindo Pintado 1 un
+  33200044  Tapa Amortiguador Slim Cond. Amortiguada          1 un
+  34162990  Portobello Zesty Light Grate Mateo 45x120 Text    6.44 m²

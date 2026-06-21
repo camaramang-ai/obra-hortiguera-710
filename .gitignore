@@ -1,0 +1,4 @@
+# Archivos temporales de Excel
+~$*.xlsx
+*.~lock.*
+.DS_Store

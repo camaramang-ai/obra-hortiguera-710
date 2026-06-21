@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obra Hortiguera 710 — Comparativa de Precios</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #0b0d11;
+    --bg-secondary: #12151b;
+    --bg-card: #1a1e26;
+    --bg-card-hover: #212630;
+    --border: #282d38;
+    --text-primary: #e8edf5;
+    --text-secondary: #8b95a8;
+    --accent-green: #22c55e;
+    --accent-green-bg: rgba(34, 197, 94, 0.12);
+    --accent-blue: #3b82f6;
+    --accent-blue-bg: rgba(59, 130, 246, 0.12);
+    --accent-amber: #f59e0b;
+    --accent-amber-bg: rgba(245, 158, 11, 0.12);
+    --accent-red: #ef4444;
+    --accent-red-bg: rgba(239, 68, 68, 0.12);
+    --barugel-color: #f97316;
+    --barugel-bg: rgba(249, 115, 22, 0.1);
+    --alternative-color: #22c55e;
+    --alternative-bg: rgba(34, 197, 94, 0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0f141f 0%, #1a1e2e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 1.5rem 1.5rem;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #f97316, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+  .header .project-info {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #6b7a95;
+  }
+  .header .project-info strong { color: var(--text-secondary); }
+
+  /* TOGGLE */
+  .toggle-bar {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    gap: 0.5rem;
+  }
+  .toggle-btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .toggle-btn:hover { border-color: #3a4055; color: var(--text-primary); }
+  .toggle-btn.active {
+    background: var(--accent-blue-bg);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+  }
+
+  /* SUMMARY */
+  .summary {
+    max-width: 1200px;
+    margin: 1.5rem auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .summary-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .summary-card .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+  .summary-card .value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-top: 0.25rem;
+  }
+  .summary-card.savings .value { color: var(--accent-green); }
+  .summary-card.barugel .value { color: var(--barugel-color); }
+  .summary-card.optimal .value { color: var(--accent-blue); }
+  .summary-card.alt-count .value { color: var(--accent-amber); }
+
+  /* HOJA SECTION */
+  .hoja-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+  }
+  .hoja-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .hoja-header .icon { font-size: 1.5rem; }
+  .hoja-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .hoja-header .count {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    padding: 0.15rem 0.6rem;
+    border-radius: 100px;
+    font-weight: 600;
+  }
+  .hoja-desc {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-top: -0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  /* PRODUCT ROW */
+  .product-row {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .product-row:hover { border-color: #353d50; }
+
+  .product-row .product-title {
+    padding: 0.85rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .product-row .product-title .num {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.8rem;
+    background: var(--bg-secondary);
+    padding: 0.1rem 0.5rem;
+    border-radius: 100px;
+  }
+  .product-row .product-title .qty {
+    color: var(--text-secondary);
+    font-weight: 400;
+    font-size: 0.8rem;
+    margin-left: auto;
+  }
+
+  .product-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 700px) {
+    .product-cards { grid-template-columns: 1fr; }
+  }
+
+  /* SUPPLIER CARD */
+  .supplier-card {
+    padding: 1rem 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    position: relative;
+    min-height: 120px;
+  }
+  .supplier-card + .supplier-card {
+    border-left: 1px solid var(--border);
+  }
+  @media (max-width: 700px) {
+    .supplier-card + .supplier-card { border-left: none; border-top: 1px solid var(--border); }
+  }
+
+  .supplier-card .photo {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  .supplier-card .info { flex: 1; min-width: 0; }
+  .supplier-card .info .supplier-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .supplier-card .info .location {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin-top: 0.1rem;
+  }
+  .supplier-card .info .price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .supplier-card .info .price {
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+  .supplier-card .info .price-unit {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+  .supplier-card .info .price-total {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+  }
+  .supplier-card .info .comprar-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  /* Barugel card styling */
+  .supplier-card.barugel { background: transparent; }
+  .supplier-card.barugel .photo { background: var(--barugel-bg); color: var(--barugel-color); }
+  .supplier-card.barugel .supplier-name { color: var(--barugel-color); }
+  .supplier-card.barugel .price { color: var(--barugel-color); }
+  .supplier-card.barugel .comprar-link {
+    background: var(--barugel-bg);
+    color: var(--barugel-color);
+    border: 1px solid rgba(249,115,22,0.25);
+  }
+  .supplier-card.barugel .comprar-link:hover { background: rgba(249,115,22,0.2); }
+
+  /* Alternative card styling */
+  .supplier-card.alternative { background: transparent; }
+  .supplier-card.alternative .photo { background: var(--alternative-bg); color: var(--alternative-color); }
+  .supplier-card.alternative .supplier-name { color: var(--alternative-color); }
+  .supplier-card.alternative .price { color: var(--alternative-color); }
+  .supplier-card.alternative .comprar-link {
+    background: var(--alternative-bg);
+    color: var(--alternative-color);
+    border: 1px solid rgba(34,197,94,0.25);
+  }
+  .supplier-card.alternative .comprar-link:hover { background: rgba(34,197,94,0.2); }
+
+  /* Best price badge */
+  .best-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--accent-blue-bg);
+    color: var(--accent-blue);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.6rem;
+    border-radius: 100px;
+    margin-top: 0.4rem;
+  }
+
+  /* No alternative */
+  .supplier-card.no-alt {
+    grid-column: 1 / -1;
+  }
+  .supplier-card.no-alt .no-alt-msg {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 0.4rem;
+  }
+
+  /* Ahorro badge */
+  .ahorro-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: var(--accent-green-bg);
+    color: var(--accent-green);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.6rem;
+    border-radius: 100px;
+    border: 1px solid rgba(34,197,94,0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  /* Difference row in card */
+  .diff-row {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-green);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .diff-row .diff-arrow { font-size: 0.7rem; }
+  .diff-row.more-expensive { color: var(--accent-red); }
+
+  /* Solo Barugel / No comparar */
+  .solo-badge, .noc-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.15rem 0.6rem;
+    border-radius: 100px;
+    margin-top: 0.4rem;
+  }
+  .solo-badge { background: rgba(148,163,184,0.1); color: #94a3b8; border: 1px solid rgba(148,163,184,0.2); }
+  .noc-badge  { background: var(--accent-amber-bg); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.2); }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+  .footer strong { color: var(--text-secondary); }
+
+  /* Toggle indicator */
+  .toggle-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+  }
+  .toggle-indicator .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .toggle-indicator .dot.bari { background: var(--barugel-color); }
+  .toggle-indicator .dot.gap  { background: var(--accent-blue); }
+
+  /* RESPONSIVE TWEAKS */
+  @media (max-width: 500px) {
+    .header h1 { font-size: 1.3rem; }
+    .summary { grid-template-columns: 1fr 1fr; }
+    .summary-card .value { font-size: 1.2rem; }
+    .product-row .product-title { font-size: 0.85rem; padding: 0.7rem 1rem; }
+    .supplier-card { padding: 0.85rem 1rem; flex-direction: column; }
+    .supplier-card .photo { width: 56px; height: 56px; font-size: 1.2rem; }
+    .toggle-btn { font-size: 0.78rem; padding: 0.5rem 1rem; }
+  }
+
+  /* ANIMATIONS */
+  .fade-in { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏗️ Obra Hortiguera 710</h1>
+  <div class="subtitle">Comparativa de Precios — Caballito, CABA</div>
+  <div class="project-info">
+    <strong>Proveedor principal:</strong> Barugel Sucursal Alcorta &nbsp;·&nbsp;
+    <strong>Contacto:</strong> Marcos Badillo <a href="https://wa.me/541145593229" style="color:var(--accent-green);text-decoration:none;">WhatsApp 11 4559-3229</a>
+  </div>
+</div>
+
+<div class="toggle-bar">
+  <span class="toggle-indicator" id="toggleIndicator">
+    <span class="dot bari"></span> Vista: <span id="toggleLabel">Opción Bari</span>
+  </span>
+  <button class="toggle-btn active" id="btnBari" onclick="switchView('bari')">🚽 Opción Bari</button>
+  <button class="toggle-btn" id="btnGap" onclick="switchView('gap')">💎 Opción The Gap</button>
+</div>
+
+<div id="summaryContainer" class="summary"></div>
+
+<div id="mainContent"></div>
+
+<div class="footer">
+  Precios relevados entre Barugel, Resta Sanitarios, Blaisten, Edificor, Distabile, Sodimac, Sagosa, GuanZetti y Remateriales · Cotización c/IVA · Junio 2026
+</div>
+
+<script>
+'use strict';
+
+const HOJAS = [
+  {
+    id: 1,
+    icon: '\u{1F9F1}',
+    title: 'Revestimientos',
+    desc: 'Cer\u00e1micos, porcelanatos y adhesivos',
+    items: [
+      { num: 1, name: 'Cerdisa Deep Sun 60\u00d7120 NAT', qty: '30,24 m\u00b2', barugel: { price: 47111, unit: '/m\u00b2', total: 1424625, note: null }, alt: null, altNote: 'NO COMPARAR', noCompare: true, imgEmoji: '\u{1F9F1}' },
+      { num: 2, name: 'Portobello Art Martase', qty: '1,44 m\u00b2', barugel: { price: 57819, unit: '/m\u00b2', total: 83259, note: null }, alt: null, altNote: 'Solo Barugel', solo: true, imgEmoji: '\u{1F3A8}' },
+      { num: 3, name: 'Tendenza Black Cement', qty: '4,95 m\u00b2', barugel: { price: 22442, unit: '/m\u00b2', total: 111088, note: null }, alt: { name: 'MercadoLibre', location: 'Online', priceUnit: 21177, unit: '/m\u00b2', total: 104826, url: 'https://listado.mercadolibre.com.ar/porcelanato-tendenza-black' }, imgEmoji: '\u2B1B' },
+      { num: 4, name: 'Eliane Forma Branco 32\u00d760', qty: '30,10 m\u00b2', barugel: { price: 19525, unit: '/m\u00b2', total: 587703, note: null }, alt: null, altNote: 'Mejor precio Barugel', bestPrice: true, imgEmoji: '\u2B1C' },
+      { num: 5, name: 'Portobello Nord Ris Ripado 30\u00d790', qty: '4,02 m\u00b2', barugel: { price: 57536, unit: '/m\u00b2', total: 231295, note: null }, alt: { name: 'Edificor', location: 'Marcos Sastre 4276, CABA', priceUnit: 47953, unit: '/m\u00b2', total: 192771, url: 'https://www.edificor.com.ar/buscar?q=nord+ris' }, imgEmoji: '\u{1F3DB}\uFE0F' },
+      { num: 6, name: 'Vite Liscio Light Eco Grey', qty: '4,32 m\u00b2', barugel: { price: 43406, unit: '/m\u00b2', total: 187514, note: '60\u00d7120' }, alt: { name: 'Blaisten', location: 'Alberdi 3928, Floresta, CABA', priceUnit: 41940, unit: '/m\u00b2', total: 181181, url: 'https://www.blaisten.com.ar/vite-porcelanato-liscio' }, imgEmoji: '\u{1F32B}\uFE0F' },
+      { num: 7, name: 'Klaukol Adhesivo Porcelanato x25kg', qty: '26 unidades', barugel: { price: 33489, unit: '/un', total: 870714, note: null }, alt: { name: 'Distabile', location: 'Av. Independencia 3750, Boedo, CABA', priceUnit: 27712, unit: '/un', total: 720512, url: 'https://www.distabile.com.ar/productos/klaukol-porcelanato-fluido-25-kg/' }, imgEmoji: '\u{1F9F4}' }
+    ]
+  },
+  {
+    id: 2,
+    icon: '\u{1F9F9}',
+    title: 'Pastinas + Sanitarios',
+    desc: 'Pastinas, ba\u00f1era, desag\u00fce y sanitarios',
+    items: [
+      { num: 8, name: 'Klaukol Pastina Fluida Blanca 5kg', qty: '1 unidad', barugel: { price: 62471, unit: '', total: 62471, note: null }, alt: { name: 'MercadoLibre', location: 'Online', priceUnit: 12872, unit: '', total: 12872, url: 'https://listado.mercadolibre.com.ar/pastina-klaukol-fluida-blanca-5kg' }, imgEmoji: '\u{1F7E4}' },
+      { num: 9, name: 'Klaukol Pastina Fluida Gris Claro 5kg', qty: '1 unidad', barugel: { price: 31236, unit: '', total: 31236, note: null }, alt: { name: 'MercadoLibre', location: 'Online', priceUnit: 14000, unit: '', total: 14000, url: 'https://listado.mercadolibre.com.ar/pastina-klaukol-gris-claro', approx: true }, imgEmoji: '\u26AA' },
+      { num: 10, name: 'Klaukol Pastina AP Perla 5kg', qty: '2 unidades', barugel: { price: 33229, unit: '/un', total: 66458, note: null }, alt: { name: 'La Clarita', location: 'CABA', priceUnit: 30888, unit: '/un', total: 61776, url: 'https://laclarita.com.ar' }, imgEmoji: '\u2728' },
+      { num: 11, name: 'FV Ba\u00f1era Enoxado 150\u00d770', qty: '1 unidad', barugel: { price: 242897, unit: '', total: 242897, note: null }, alt: null, altNote: 'Mejor Barugel', bestPrice: true, imgEmoji: '\u{1F6C1}' },
+      { num: 12, name: 'FV Desag\u00fce Lineal 60cm', qty: '1 unidad', barugel: { price: 227292, unit: '', total: 227292, note: null }, alt: null, solo: true, imgEmoji: '\u{1F527}' },
+      { num: 13, name: '\u{1F6BD} Inodoro Ferrum Bari Largo', qty: '1 unidad', barugel: { price: 207024, unit: '', total: 207024, note: null }, alt: { name: 'Resta Sanitarios', location: 'Goya 621, Floresta, CABA', priceUnit: 128000, unit: '', total: 128000, approx: true, url: 'https://tiendaresta.com.ar/marcas/ferrum' }, imgEmoji: '\u{1F6BD}', group: 'bari' },
+      { num: 14, name: 'Dep\u00f3sito Ferrum Bari', qty: '1 unidad', barugel: { price: 199313, unit: '', total: 199313, note: null }, alt: { name: 'Resta Sanitarios', location: 'Goya 621, Floresta, CABA', priceUnit: 155000, unit: '', total: 155000, approx: true, url: 'https://tiendaresta.com.ar/marcas/ferrum/depositos' }, imgEmoji: '\u{1F5C4}\uFE0F', group: 'bari' },
+      { num: 15, name: 'Bidet Ferrum Bari 3Ag', qty: '1 unidad', barugel: { price: 152316, unit: '', total: 152316, note: null }, alt: { name: 'Resta Sanitarios', location: 'Goya 621, Floresta, CABA', priceUnit: 120000, unit: '', total: 120000, approx: true, url: 'https://tiendaresta.com.ar/marcas/ferrum/bidets' }, imgEmoji: '\u{1F6BB}', group: 'bari' },
+      { num: 16, name: 'Tapa Ferrum Bari Madera', qty: '1 unidad', barugel: { price: 70438, unit: '', total: 70438, note: null }, alt: { name: 'Resta Sanitarios', location: 'Goya 621, Floresta, CABA', priceUnit: 60000, unit: '', total: 60000, approx: true, url: 'https://tiendaresta.com.ar/marcas/ferrum/accesorios' }, imgEmoji: '\u{1FAB5}', group: 'bari' },
+      { num: 17, name: 'Schneider Vanitory City 80cm (c/mesada)', qty: '1 unidad', barugel: { price: 676436, unit: '', total: 676436, note: null }, alt: { name: 'Sagosa', location: 'sagosa.com.ar (Online)', priceUnit: 630199, unit: '', total: 630199, url: 'https://www.sagosa.com.ar/mueble-vanitory/3855-vanitory-schneider-city-pvc-wengue-con-mesada-losa-3-agujeros-80x84x46-cm.html' }, imgEmoji: '\u{1F6BF}' },
+      { num: 18, name: 'Schneider Vanitory Rivo 60cm (c/mesada)', qty: '1 unidad', barugel: { price: 534380, unit: '', total: 534380, note: null }, alt: { name: 'GuanZetti', location: 'guanzetti.com.ar (Online)', priceUnit: 535000, unit: '', total: 535000, approx: true, url: 'https://mail.guanzetti.com.ar/product/vanitory-60-cm-blanco-rivo-schneider-incluye-mesada-marmolina-3-agujeros' }, imgEmoji: '\u{1F6B0}', altIsWorse: true }
+    ]
+  },
+  {
+    id: 3,
+    icon: '\u{1F529}',
+    title: 'Grif\u00e9r\u00edas FV',
+    desc: 'Canillas, duchas y accesorios cromados',
+    items: [
+      { num: 19, name: 'FV Lavatorio Mauna Cromo', qty: '3 juegos de grifer\u00eda', barugel: { price: 198599, unit: '/un', total: 595797, note: null }, alt: { name: 'Resta Sanitarios', location: 'Goya 621, Floresta, CABA', priceUnit: 170000, unit: '/un', total: 510000, approx: true, url: 'https://tiendaresta.com.ar/ficha-1419-griferia-ducha-y-banera-fv-mauna-0103-g8' }, imgEmoji: '\u{1F6B0}' },
+      { num: 20, name: 'FV Bidet Mauna Cromo', qty: '2 juegos de grifer\u00eda', barugel: { price: 216636, unit: '/un', total: 433272, note: null }, alt: { name: 'Resta Sanitarios', location: 'Goya 621, Floresta, CABA', priceUnit: 190000, unit: '/un', total: 380000, approx: true, url: 'https://tiendaresta.com.ar/ficha-1419-griferia-ducha-y-banera-fv-mauna-0103-g8' }, imgEmoji: '\u{1F6BB}' },
+      { num: 21, name: 'FV Ducha Mauna c/Transfer', qty: '2 juegos de grifer\u00eda', barugel: { price: 226815, unit: '/un', total: 453630, note: null }, alt: { name: 'Resta Sanitarios', location: 'Goya 621, Floresta, CABA', priceUnit: 201500, unit: '/un', total: 403000, approx: true, url: 'https://tiendaresta.com.ar/ficha-1419-griferia-ducha-y-banera-fv-mauna-0103-g8' }, imgEmoji: '\u{1F6BF}' },
+      { num: 22, name: 'FV Duchamatic c/Brazo', qty: '2 unidades', barugel: { price: 274764, unit: '/un', total: 549528, note: null }, alt: { name: 'Resta Sanitarios', location: 'Goya 621, Floresta, CABA', priceUnit: 185000, unit: '/un', total: 370000, approx: true, url: 'https://tiendaresta.com.ar/ficha-1175-ducha-de-pared-con-duchador-fv-duchamatic-0119-cromo' }, imgEmoji: '\u{1F6BF}' },
+      { num: 23, name: 'FV Portarrollos Cromo', qty: '3 unidades', barugel: { price: 43853, unit: '/un', total: 131559, note: null }, alt: { name: 'Sodimac', location: 'Devoto, CABA', priceUnit: null, unit: '', total: 55000, note: 'Combo 3 piezas (portarrollo+toallero+percha)', url: 'https://www.sodimac.com.ar/sodimac-ar/category/cat20434/accesorios-de-bano/?f.product.brandName=fv' }, imgEmoji: '\u{1F9FB}', altCombo: true },
+      { num: 24, name: 'FV Toallero Barra Cromo', qty: '3 unidades', barugel: { price: 73089, unit: '/un', total: 219267, note: null }, alt: { name: 'Sodimac', location: 'Devoto, CABA', priceUnit: null, unit: '', total: 55000, note: 'Combo 3 piezas', url: 'https://www.sodimac.com.ar/sodimac-ar/category/cat20434/accesorios-de-bano/?f.product.brandName=fv' }, imgEmoji: '\u{1F9E3}', altCombo: true },
+      { num: 25, name: 'FV Percha Cromo', qty: '5 unidades', barugel: { price: 27289, unit: '/un', total: 136445, note: null }, alt: { name: 'Sodimac', location: 'Devoto, CABA', priceUnit: null, unit: '', total: 55000, note: 'Combo 5 piezas', url: 'https://www.sodimac.com.ar/sodimac-ar/category/cat20434/accesorios-de-bano/?f.product.brandName=fv' }, imgEmoji: '\u{1F9E5}', altCombo: true }
+    ]
+  },
+  {
+    id: 4,
+    icon: '\u{1FA9E}',
+    title: 'The Gap + Espejos',
+    desc: 'Espejos LED, sanitarios Roca The Gap',
+    items: [
+      { num: 26, name: 'Reflejar Rect. 100\u00d780 LED Touch', qty: '1 unidad', barugel: { price: 297814, unit: '', total: 297814, note: null }, alt: { name: 'MercadoLibre', location: 'Online', priceUnit: 259100, unit: '', total: 259100, url: 'https://listado.mercadolibre.com.ar/espejo-apaisada-led-pared-rectangular-touch-100x80-reflejar' }, imgEmoji: '\u{1FA9E}' },
+      { num: 27, name: 'Schneider Espejo LED', qty: '1 unidad', barugel: { price: 282385, unit: '', total: 282385, note: null }, alt: { name: 'MercadoLibre', location: 'Online', priceUnit: 180000, unit: '', total: 180000, url: 'https://listado.mercadolibre.com.ar/espejo-led-schneider-bano', approx: true, note: '~$100K\u2013$260K' }, imgEmoji: '\u{1F4A1}' },
+      { num: 28, name: 'Gemini 60\u00d770 Borde Acr\u00edlico LED', qty: '1 unidad', barugel: { price: 611290, unit: '', total: 611290, note: null }, alt: { name: 'MercadoLibre', location: 'Online', priceUnit: 259100, unit: '', total: 259100, url: 'https://www.mercadolibre.com.ar/espejo-led-con-borde-acrilico-iluminado-gemini-60-schneider/up/MLAU3658576066' }, imgEmoji: '\u{1F48E}' },
+      { num: 29, name: '\u{1F48E} Roca The Gap Inodoro Largo SD', qty: '1 unidad', barugel: { price: 500148, unit: '', total: 500148, note: null }, alt: null, altNote: 'Mejor Barugel', bestPrice: true, imgEmoji: '\u{1F6BD}', group: 'gap' },
+      { num: 30, name: 'Roca The Gap Alimentaci\u00f3n 3/6', qty: '1 unidad', barugel: { price: 453198, unit: '', total: 453198, note: null }, alt: null, altNote: 'Mejor Barugel', bestPrice: true, imgEmoji: '\u{1F527}', group: 'gap' },
+      { num: 31, name: 'Roca The Gap Bidet 3Ag', qty: '1 unidad', barugel: { price: 169411, unit: '', total: 169411, note: null }, alt: null, altNote: 'Mejor Barugel', bestPrice: true, imgEmoji: '\u{1F6BB}', group: 'gap' },
+      { num: 32, name: 'Tapa The Gap Slim', qty: '1 unidad', barugel: { price: 62355, unit: '', total: 62355, note: null }, alt: { name: 'Remateriales', location: 'remateriales.com.ar (Online)', priceUnit: 39270, unit: '', total: 39270, url: 'https://remateriales.com.ar/p/tapa-asiento-roca-the-gap-slim-caida-suave/61bf2a78-cf4f-43df-b0d1-01282d61c165' }, imgEmoji: '\u{1FAB5}', group: 'gap' }
+    ]
+  }
+];
+
+// VIEW STATE
+let currentView = 'bari';
+
+function switchView(view) {
+  currentView = view;
+  document.getElementById('btnBari').classList.toggle('active', view === 'bari');
+  document.getElementById('btnGap').classList.toggle('active', view === 'gap');
+  document.getElementById('toggleLabel').textContent = view === 'bari' ? 'Opci\u00f3n Bari' : 'Opci\u00f3n The Gap';
+  render();
+}
+
+// FORMAT HELPERS
+function fmt(n) {
+  return '$' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function fmtUnit(price, unit) {
+  return fmt(price) + (unit || '');
+}
+
+// COMPUTATION
+function isBari(item) {
+  return item.group === 'bari';
+}
+
+function isGap(item) {
+  return item.group === 'gap';
+}
+
+function visibleItems(hoja) {
+  return hoja.items.filter(item => {
+    if (currentView === 'bari') {
+      return !isGap(item);
+    }
+    return !isBari(item);
+  });
+}
+
+function computeTotals() {
+  let barugelTotal = 0;
+  let altTotal = 0;
+  let savings = 0;
+  let altCount = 0;
+  HOJAS.forEach(hoja => {
+    visibleItems(hoja).forEach(item => {
+      barugelTotal += item.barugel.total;
+      if (item.alt && !item.altIsWorse) {
+        altTotal += item.alt.total;
+        savings += item.barugel.total - item.alt.total;
+        altCount++;
+      } else {
+        altTotal += item.barugel.total;
+      }
+    });
+  });
+  return { barugelTotal, altTotal, savings, altCount };
+}
+
+// RENDER
+function render() {
+  const main = document.getElementById('mainContent');
+  const summaryEl = document.getElementById('summaryContainer');
+  const totals = computeTotals();
+
+  summaryEl.innerHTML = `
+    <div class="summary-card barugel">
+      <div class="label">Total Barugel</div>
+      <div class="value">${fmt(totals.barugelTotal)}</div>
+    </div>
+    <div class="summary-card optimal">
+      <div class="label">Total \u00d3ptimo (con alternativas)</div>
+      <div class="value">${fmt(totals.altTotal)}</div>
+    </div>
+    <div class="summary-card savings">
+      <div class="label">💰 Ahorro Total</div>
+      <div class="value">${fmt(totals.savings)}</div>
+    </div>
+    <div class="summary-card alt-count">
+      <div class="label">Productos con Mejor Precio</div>
+      <div class="value">${totals.altCount}</div>
+    </div>
+  `;
+
+  let html = '';
+  HOJAS.forEach(hoja => {
+    const items = visibleItems(hoja);
+    if (items.length === 0) { return; }
+    html += `
+      <div class="hoja-section fade-in">
+        <div class="hoja-header">
+          <span class="icon">${hoja.icon}</span>
+          <h2>Hoja ${hoja.id} \u00b7 ${hoja.title}</h2>
+          <span class="count">${items.length} productos</span>
+        </div>
+        <div class="hoja-desc">${hoja.desc}</div>
+    `;
+    items.forEach(item => {
+      html += renderProductRow(item);
+    });
+    html += `</div>`;
+  });
+  main.innerHTML = html;
+}
+
+function renderProductRow(item) {
+  const b = item.barugel;
+  const a = item.alt;
+
+  const comprarLink = (url, label) => {
+    if (!url) { return ''; }
+    return ` <a href="${url}" target="_blank" rel="noopener" class="comprar-link">🔗 ${label}</a>`;
+  };
+
+  let nocBadge = '';
+  let soloBadge = '';
+  let bestBadge = '';
+  if (!a) {
+    if (item.altNote === 'NO COMPARAR') {
+      nocBadge = `<div class="noc-badge">🚫 ${item.altNote}</div>`;
+    } else if (item.solo) {
+      soloBadge = `<div class="solo-badge">Solo Barugel</div>`;
+    } else if (item.bestPrice) {
+      bestBadge = `<div class="best-badge">🏆 Mejor precio</div>`;
+    }
+  }
+
+  const barugelCard = `
+    <div class="supplier-card barugel${!a ? ' no-alt' : ''}">
+      <div class="photo">${item.imgEmoji || '🏪'}</div>
+      <div class="info">
+        <div class="supplier-name">Barugel \u00b7 Alcorta</div>
+        <div class="location">Sucursal Alcorta, CABA</div>
+        <div class="price-row">
+          <span class="price">${b.unit ? fmtUnit(b.price, b.unit) : fmt(b.price)}</span>
+          ${b.note ? `<span class="price-unit">${b.note}</span>` : ''}
+        </div>
+        <div class="price-total">Total: ${fmt(b.total)}</div>
+        ${b.unit ? `<div class="price-unit">${item.qty}</div>` : ''}
+        ${comprarLink('https://www.barugel.com.ar', 'Ver en Barugel')}
+        ${nocBadge}
+        ${soloBadge}
+        ${bestBadge}
+      </div>
+    </div>
+  `;
+
+  let altCard = '';
+  if (a) {
+    const savingsAmount = b.total - a.total;
+    const isCheaper = savingsAmount > 0 && !item.altIsWorse;
+    const isMoreExpensive = item.altIsWorse || savingsAmount < 0;
+
+    const ahorroBadge = isCheaper
+      ? `<div class="ahorro-badge">💰 Ahorro ${fmt(savingsAmount)}</div>`
+      : '';
+
+    const priceDisplay = a.priceUnit
+      ? fmtUnit(a.priceUnit, a.unit || '')
+      : fmt(a.total || a.priceUnit || 0);
+
+    let diffHtml = '';
+    if (isCheaper) {
+      diffHtml = `<div class="diff-row"><span class="diff-arrow">\u25bc</span> Ahorras ${fmt(savingsAmount)}</div>`;
+    } else if (isMoreExpensive) {
+      diffHtml = `<div class="diff-row more-expensive"><span class="diff-arrow">\u25b2</span> ${fmt(Math.abs(savingsAmount))} m\u00e1s caro</div>`;
+    }
+
+    altCard = `
+      <div class="supplier-card alternative">
+        ${ahorroBadge}
+        <div class="photo">${item.imgEmoji || '🏪'}</div>
+        <div class="info">
+          <div class="supplier-name">${a.name}</div>
+          <div class="location">${a.location}</div>
+          <div class="price-row">
+            <span class="price">${priceDisplay}</span>
+            ${a.approx ? `<span class="price-unit">(aproximado)</span>` : ''}
+            ${a.note ? `<span class="price-unit">${a.note}</span>` : ''}
+          </div>
+          <div class="price-total">
+            Total: ${fmt(a.total)}
+            ${a.approx ? `<span style="color:var(--text-secondary);font-size:0.75rem;margin-left:0.25rem;">~aprox.</span>` : ''}
+          </div>
+          ${item.altCombo && a.note ? `<div class="price-unit" style="margin-top:0.2rem;">${a.note}</div>` : ''}
+          ${comprarLink(a.url, 'Comprar')}
+          ${diffHtml}
+        </div>
+      </div>
+    `;
+  } else if (item.altNote && item.altNote !== 'NO COMPARAR' && !item.solo && !item.bestPrice) {
+    altCard = `
+      <div class="supplier-card alternative no-alt">
+        <div class="photo">\u2139\ufe0f</div>
+        <div class="info">
+          <div class="no-alt-msg">${item.altNote}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="product-row">
+      <div class="product-title">
+        <span><span class="num">#${item.num}</span> ${item.name}</span>
+        <span class="qty">${item.qty}</span>
+      </div>
+      <div class="product-cards">
+        ${barugelCard}
+        ${altCard || ''}
+      </div>
+    </div>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>

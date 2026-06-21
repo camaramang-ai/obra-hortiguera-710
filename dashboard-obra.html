@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obra Hortiguera 710 — Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0f1117;
+  --card: #1a1d28;
+  --border: #2a2d3a;
+  --text: #e1e4ed;
+  --muted: #8b8fa3;
+  --accent: #5b8def;
+  --green: #34d399;
+  --red: #f87171;
+  --amber: #fbbf24;
+  --cyan: #22d3ee;
+  --purple: #a78bfa;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg); color: var(--text); padding: 24px;
+}
+.dash-wrap { max-width: 1400px; margin: 0 auto; }
+
+/* Header */
+header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+}
+h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+h1 small { display: block; font-size: 14px; font-weight: 400; color: var(--muted); margin-top: 4px; }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 100px;
+  padding: 8px 20px; font-size: 14px;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot.green { background: var(--green); }
+.dot.amber { background: var(--amber); }
+
+/* Grid */
+.grid { display: grid; gap: 20px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px; position: relative;
+}
+.card h2 { font-size: 15px; font-weight: 600; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.card .big { font-size: 32px; font-weight: 700; }
+.card .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.card .sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.green-text { color: var(--green); }
+.red-text { color: var(--red); }
+.amber-text { color: var(--amber); }
+.cyan-text { color: var(--cyan); }
+.purple-text { color: var(--purple); }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; color: var(--muted); font-weight: 500; padding: 8px 8px 8px 0; border-bottom: 1px solid var(--border); }
+td { padding: 10px 8px 10px 0; border-bottom: 1px solid rgba(42,45,58,0.5); }
+tr:last-child td { border-bottom: none; }
+.best { color: var(--green); font-weight: 600; }
+.worst { color: var(--red); }
+td:last-child, th:last-child { text-align: right; padding-right: 0; }
+td:nth-child(4), th:nth-child(4) { text-align: right; }
+td:nth-child(5), th:nth-child(5) { text-align: right; }
+
+/* Chart containers */
+.chart-wrap { position: relative; height: 260px; }
+.chart-wrap-sm { position: relative; height: 200px; }
+
+/* Task list */
+.task-list { list-style: none; }
+.task-list li {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid rgba(42,45,58,0.5);
+  cursor: pointer;
+}
+.task-list li:last-child { border-bottom: none; }
+.task-list input[type="checkbox"] {
+  margin-top: 3px; width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;
+}
+.task-list li.done span { text-decoration: line-through; color: var(--muted); }
+.task-badge {
+  display: inline-block; font-size: 10px; padding: 2px 8px;
+  border-radius: 100px; margin-left: 8px; flex-shrink: 0;
+}
+.badge-blue { background: rgba(91,141,239,0.15); color: var(--accent); }
+.badge-green { background: rgba(52,211,153,0.15); color: var(--green); }
+.badge-amber { background: rgba(251,191,36,0.15); color: var(--amber); }
+.badge-red { background: rgba(248,113,113,0.15); color: var(--red); }
+
+/* Progress bar */
+.progress-wrap { margin: 16px 0; }
+.progress-bar {
+  background: var(--border); border-radius: 100px; height: 8px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--accent), var(--cyan));
+  transition: width 0.6s ease;
+}
+.progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  header { flex-direction: column; }
+}
+
+/* Tooltip hover for savings */
+.saving-spark {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--green); cursor: default;
+}
+
+/* Small footer */
+.footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 40px; padding: 20px; border-top: 1px solid var(--border); }
+
+/* Full-width */
+.full { grid-column: 1 / -1; }
+
+/* Gauge mini */
+.gauge-row { display: flex; gap: 24px; justify-content: space-around; margin-top: 8px; }
+.gauge-item { text-align: center; }
+.gauge-item .num { font-size: 24px; font-weight: 700; }
+.gauge-item .desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="dash-wrap">
+<header>
+  <div>
+    <h1>🏗️ Obra Hortiguera 710
+      <small>Hortiguera 710, Caballito, CABA · Junio 2026</small>
+    </h1>
+  </div>
+  <div class="status-badge"><span class="dot amber"></span> En preparación — Etapa: Terminaciones</div>
+</header>
+
+<div class="grid grid-4" style="margin-bottom:20px">
+  <div class="card">
+    <div class="label">Presupuesto Base</div>
+    <div class="big">$9,791,694</div>
+    <div class="sub">Barugel (materiales + flete + IVA)</div>
+  </div>
+  <div class="card">
+    <div class="label">Límite Arquitectos (ítem D)</div>
+    <div class="big cyan-text">$8,772,420</div>
+    <div class="sub">Neto — tope de terminaciones</div>
+  </div>
+  <div class="card">
+    <div class="label">Margen disponible</div>
+    <div class="big green-text">$680,111</div>
+    <div class="sub">Barugel ($8,092,309) vs Arq. ($8,772,420)</div>
+  </div>
+  <div class="card">
+    <div class="label">Ahorro potencial</div>
+    <div class="big purple-text">$1,767,431</div>
+    <div class="sub">27% vs Barugel comprando por separado</div>
+  </div>
+</div>
+
+<div class="grid grid-2" style="margin-bottom:20px">
+  <div class="card full" style="margin-bottom:20px">
+    <h2>Progreso General</h2>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:32%"></div></div>
+      <div class="progress-label"><span id="doneLabel">5 de 16 pendientes completados</span><span>32%</span></div>
+    </div>
+  </div>
+
+  <!-- Ahorro por categoría: barras -->
+  <div class="card full" style="margin-bottom:20px">
+    <h2>Comparativa Barugel vs Mejor Precio — Ahorro por Categoría</h2>
+    <div class="grid grid-2">
+      <div class="chart-wrap"><canvas id="savingsChart"></canvas></div>
+      <div>
+        <table>
+          <thead><tr><th>Categoría</th><th>Barugel</th><th>Mejor</th><th>Ahorro</th><th>%</th></tr></thead>
+          <tbody id="savingsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabla detallada -->
+<div class="card" style="margin-bottom:20px">
+  <h2>Detalle de Productos — Comparativa Completa</h2>
+  <div style="max-height:500px; overflow-y:auto; margin-top:8px;">
+    <table>
+      <thead>
+        <tr style="position:sticky; top:0; background:var(--card); z-index:1">
+          <th style="width:50px">Item</th>
+          <th>Producto</th>
+          <th style="width:80px">Cant.</th>
+          <th style="width:110px">Barugel c/IVA</th>
+          <th style="width:110px">Mejor Precio</th>
+          <th style="width:110px">Ahorro</th>
+        </tr>
+      </thead>
+      <tbody id="detailTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Pendientes + Distribución -->
+<div class="grid grid-2" style="margin-bottom:20px">
+  <div class="card">
+    <h2>📋 Pendientes</h2>
+    <ul class="task-list" id="taskList"></ul>
+  </div>
+  <div class="card">
+    <h2>Distribución del Presupuesto</h2>
+    <div class="chart-wrap-sm"><canvas id="pieChart"></canvas></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Proveedores Recomendados por Categoría</h2>
+  <table>
+    <thead><tr><th>Categoría</th><th>Mejor Proveedor</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td>Revestimientos (gral)</td><td class="best">Barugel</td><td>Mejor variedad y precio global</td></tr>
+      <tr><td>Porcelanato Vite Liscio</td><td class="best">ML #1 ($28,872)</td><td>Diferencias de formato (120x120 vs 60x120)</td></tr>
+      <tr><td>Pinto Vivant</td><td class="best">Edificor ($60,984)</td><td>¡Casi 50% más barato que Barugel!</td></tr>
+      <tr><td>Adhesivo Klaukol</td><td class="best">Bercomat ($18,200)</td><td>Promo — ahorro ~$397K en 26 un.</td></tr>
+      <tr><td>Pastinas Klaukol</td><td class="best">ML / La Clarita</td><td>Hasta 54% de ahorro</td></tr>
+      <tr><td>Set Ferrum Bari</td><td class="best">El Amigo / ML</td><td>Ahorro ~$187K vs Barugel</td></tr>
+      <tr><td>Vanitory Schneider</td><td class="best">Merlino ($307,703)</td><td>Rivo 60cm — pendiente City 80cm</td></tr>
+      <tr><td>Grifería FV Mauna</td><td class="best">NIMAT (duchas) / Barugel (lavatorio)</td><td>Ducha mucho más barata en NIMAT</td></tr>
+      <tr><td>Duchamatic FV</td><td class="best">Resta ($215,511)</td><td>-5% transferencia</td></tr>
+      <tr><td>Bañera FV Enoxado</td><td class="best">Barugel</td><td>Mejor precio confirmado</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer">
+  Obra Hortiguera 710 · Dashboard generado el 20/06/2026 · Fuente: comparativa_completa.xlsx + resumen-proyecto.md
+</div>
+</div>
+
+<script>
+// ========== DATA ==========
+const savingsData = [
+  { cat: 'Revestimientos', barugel: 2700156, mejor: 1898000, ahorro: 802000, pct: 30 },
+  { cat: 'Pastinas', barugel: 126937, mejor: 58000, ahorro: 69000, pct: 54 },
+  { cat: 'Ferrum Bari', barugel: 629090, mejor: 442049, ahorro: 187000, pct: 30 },
+  { cat: 'Vanitory Schw.', barugel: 1210816, mejor: 765357, ahorro: 445000, pct: 37 },
+  { cat: 'Bañera+Desague', barugel: 470189, mejor: 433539, ahorro: 37000, pct: 8 },
+  { cat: 'Grifería Mauna', barugel: 642050, mejor: 533368, ahorro: 109000, pct: 17 },
+  { cat: 'Duchamatic', barugel: 549528, mejor: 431022, ahorro: 119000, pct: 22 },
+  { cat: 'Accesorios FV', barugel: 144231, mejor: 144231, ahorro: 0, pct: 0 },
+];
+
+const detailItems = [
+  ['D.1', 'Portobello Art Martase 1.44m²', '$57,819', '$57,819', '$0', ''],
+  ['D.2', 'Tendenza Black Cement 4.95m²', '$22,442', '$21,177', '-$1,265', 'Ferrocons: $22,103'],
+  ['D.3', 'Eliane Forma Branco 32x60 30.1m²', '$19,525', '$19,525', '$0', 'Barugel mejor'],
+  ['D.4', 'Portobello Nord Ris Ripado 4.02m²', '$57,536', '$47,337', '-$10,199', 'Ferrocons ⚡'],
+  ['D.5', 'Vite Liscio Light Eco Grey 4.32m²', '$43,406', '$28,872', '-$14,534', 'ML (formato dif.)'],
+  ['D.6', 'Pinto Vivant Luge Suave 2.04m²', '$117,078', '$60,984', '-$56,094', 'Edificor ⚡'],
+  ['D.7', 'Pinto PBG Vivant Suage 3.06m²', '$117,078', '$60,984', '-$56,094', 'Edificor ⚡'],
+  ['K.1', 'Klaukol Adhesivo Porcelanato 25kg ×26', '$33,489', '$18,200', '-$15,289', 'Bercomat ⚡'],
+  ['P.1', 'Klaukol Pastina Blanca 5kg', '$62,471', '$12,872', '-$49,599', 'ML ⚡'],
+  ['P.2', 'Klaukol Pastina Gris Claro 5kg', '$31,236', '$14,000', '-$17,236', 'ML'],
+  ['P.3', 'Klaukol Pastina AP Perla 5kg ×2', '$33,229', '$30,888', '-$2,341', 'La Clarita'],
+  ['S.1', 'Inodoro Largo Ferrum Bari', '$207,024', '$163,695', '-$43,329', 'El Amigo ⚡'],
+  ['S.2', 'Depósito Ferrum Bari Apoyar', '$199,312', '$142,194', '-$57,118', 'El Amigo ⚡'],
+  ['S.3', 'Bidet Ferrum Bari 3 Ag.', '$152,316', '$103,248', '-$49,068', 'ML ⚡'],
+  ['S.4', 'Tapa Asiento Bari Madera', '$70,438', '$32,912', '-$37,526', 'Merlino ⚡'],
+  ['V.1', 'Schneider Vanitory City 80cm Colg.', '$676,436', '$599,000', '-$77,436', 'ML (pend. verif.)'],
+  ['V.2', 'Schneider Vanitory Rivo 60cm Colg.', '$534,380', '$307,703', '-$226,677', 'Merlino ⚡'],
+  ['B.1', 'FV Bañera Enoxado 150x70', '$242,897', '$242,897', '$0', 'Barugel mejor'],
+  ['B.2', 'FV Desagüe Lineal 60cm', '$227,292', '$190,642', '-$36,650', 'Gili y Cía'],
+  ['G.1', 'FV Lavatorio Mauna Cromo ×3', '$198,599', '$185,897', '-$12,702', 'NIMAT'],
+  ['G.2', 'FV Bidet Mauna Cromo ×2', '$216,636', '$202,781', '-$13,855', 'NIMAT'],
+  ['G.3', 'FV Ducha Mauna c/Transfer. ×2', '$226,815', '$144,690', '-$82,125', 'NIMAT ⚡'],
+  ['G.4', 'FV Duchamatic c/Brazo ×2', '$274,764', '$215,511', '-$59,253', 'Resta -5%'],
+  ['A.1', 'FV Portarrollos Cromo ×3', '$43,853', '$43,853', '$0', 'Solo Barugel'],
+  ['A.2', 'FV Toallero Barra Cromo ×3', '$73,089', '$73,089', '$0', 'Solo Barugel'],
+  ['A.3', 'FV Percha Cromo ×5', '$27,289', '$27,289', '$0', 'Solo Barugel'],
+];
+
+const tasks = [
+  { id: 't1', text: 'Cotizar Ferrum Bari completo en Blaisten, Bercomat y Caballito Sanitarios', cat: 'cotización' },
+  { id: 't2', text: 'Cotizar grifería FV Mauna en Familia Bercomat', cat: 'cotización' },
+  { id: 't3', text: 'Cotizar adhesivo Klaukol en Bercomat (evaluar Weber Forte)', cat: 'cotización' },
+  { id: 't4', text: 'Cotizar vanitory Schneider en Blaisten Floresta', cat: 'cotización' },
+  { id: 't5', text: 'Verificar stock y validez del Cerdisa en Barugel Alcorta', cat: 'urgente' },
+  { id: 't6', text: 'Negociar flete con Marcos Badillo (15-20% descuento)', cat: 'negociación' },
+  { id: 't7', text: 'Visitar Caballito Sanitarios (Donato Álvarez 64) presencial', cat: 'presencial' },
+  { id: 't8', text: 'Verificar promo Klaukol en Bercomat', cat: 'cotización' },
+  { id: 't9', text: 'Consultar precio Vanitory City 80cm en Dimora', cat: 'cotización' },
+  { id: 't10', text: 'Buscar Bañera Enoxado y Desagüe en otros proveedores', cat: 'cotización' },
+  { id: 't11', text: 'Verificar equivalencia FV Libby (arq.) vs Mauna (Barugel)', cat: 'verificación' },
+  { id: 't12', text: 'Confirmar factura A con cada proveedor', cat: 'administrativo' },
+  { id: 't13', text: 'Evaluar compra combinada para maximizar ahorro', cat: 'estrategia' },
+  { id: 't14', text: 'Definir cronograma de entregas', cat: 'logística' },
+  { id: 't15', text: 'Confirmar presupuesto final vs límite arquitectos', cat: 'administrativo' },
+  { id: 't16', text: 'Cargar datos de pago y facturación (Mariana)', cat: 'administrativo' },
+];
+
+// ========== CATEGORY BADGE ==========
+function badgeFor(cat) {
+  const map = { 'cotización': 'badge-blue', 'urgente': 'badge-red', 'negociación': 'badge-amber', 'presencial': 'badge-blue', 'verificación': 'badge-amber', 'administrativo': 'badge-green', 'estrategia': 'badge-purple', 'logística': 'badge-blue' };
+  const cls = map[cat] || 'badge-blue';
+  return `<span class="task-badge ${cls}">${cat}</span>`;
+}
+
+// ========== PENDIENTES ==========
+(function() {
+  const ul = document.getElementById('taskList');
+  const saved = JSON.parse(localStorage.getItem('obra_tasks_done') || '[]');
+  tasks.forEach(t => {
+    const li = document.createElement('li');
+    if (saved.includes(t.id)) li.classList.add('done');
+    li.innerHTML = `<input type="checkbox" ${saved.includes(t.id) ? 'checked' : ''} data-id="${t.id}"><span>${t.text}</span> ${badgeFor(t.cat)}`;
+    li.querySelector('input').addEventListener('change', function() {
+      li.classList.toggle('done');
+      updateProgress();
+      const done = JSON.parse(localStorage.getItem('obra_tasks_done') || '[]');
+      if (this.checked) { if (!done.includes(t.id)) done.push(t.id); }
+      else { const i = done.indexOf(t.id); if (i > -1) done.splice(i, 1); }
+      localStorage.setItem('obra_tasks_done', JSON.stringify(done));
+    });
+    ul.appendChild(li);
+  });
+})();
+
+function updateProgress() {
+  const total = tasks.length;
+  const done = document.querySelectorAll('#taskList li.done').length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('doneLabel').textContent = `${done} de ${total} pendientes completados`;
+}
+setTimeout(updateProgress, 50);
+
+// ========== TABLAS ==========
+(function() {
+  const body = document.getElementById('savingsTableBody');
+  savingsData.forEach(d => {
+    const tr = document.createElement('tr');
+    const ahorroClass = d.ahorro > 0 ? 'best' : '';
+    tr.innerHTML = `<td>${d.cat}</td><td>$${d.barugel.toLocaleString()}</td><td>$${d.mejor.toLocaleString()}</td><td class="${ahorroClass}">${d.ahorro > 0 ? '-$' + d.ahorro.toLocaleString() : '$0'}</td><td class="${ahorroClass}">${d.pct}%</td>`;
+    body.appendChild(tr);
+  });
+
+  const detailBody = document.getElementById('detailTableBody');
+  detailItems.forEach(item => {
+    const tr = document.createElement('tr');
+    const ahorroVal = parseInt(item[4].replace(/[$,]/g, '').replace('-', ''));
+    const ahorroClass = ahorroVal > 0 ? 'best' : (ahorroVal < 0 ? '' : '');
+    tr.innerHTML = `<td style="color:var(--muted)">${item[0]}</td><td>${item[1]}</td><td>${item[2]}</td><td>${item[3]}</td><td class="${ahorroClass}">${item[4]}</td>`;
+    detailBody.appendChild(tr);
+  });
+})();
+
+// ========== CHART: SAVINGS ==========
+new Chart(document.getElementById('savingsChart'), {
+  type: 'bar',
+  data: {
+    labels: savingsData.map(d => d.cat),
+    datasets: [
+      { label: 'Barugel', data: savingsData.map(d => d.barugel), backgroundColor: 'rgba(91,141,239,0.7)', borderRadius: 4 },
+      { label: 'Mejor Precio', data: savingsData.map(d => d.mejor), backgroundColor: 'rgba(52,211,153,0.7)', borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { color: '#8b8fa3', boxWidth: 12, padding: 12 } },
+    },
+    scales: {
+      x: { ticks: { color: '#8b8fa3' }, grid: { color: 'rgba(42,45,58,0.5)' } },
+      y: { ticks: { color: '#8b8fa3', callback: v => '$' + (v/1000).toFixed(0) + 'K' }, grid: { color: 'rgba(42,45,58,0.5)' } }
+    }
+  }
+});
+
+// ========== CHART: PIE ==========
+const pieLabels = ['Revestimientos', 'Sanitarios', 'Grifería', 'Vanitory', 'Pastinas', 'Adhesivo', 'Bañera/Desague', 'Accesorios'];
+const pieData = [2700156, 629090, 642050, 1210816, 126937, 870740, 470189, 144231];
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: pieLabels,
+    datasets: [{ data: pieData, backgroundColor: ['#5b8def','#34d399','#fbbf24','#a78bfa','#f87171','#22d3ee','#f97316','#8b8fa3'] }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { color: '#8b8fa3', boxWidth: 10, padding: 8, font: { size: 11 } } },
+    },
+    cutout: '60%'
+  }
+});
+</script>
+</body>
+</html>
